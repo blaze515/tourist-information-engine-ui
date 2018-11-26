@@ -1,0 +1,29 @@
+p {
+  font-family: Lato;
+}
+
+.container {
+  position: absolute;
+  top: 80px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #eee;
+}
+
+mat-toolbar{
+  width: 100%;
+}
+
+mat-sidenav{
+  padding-right: 10px;
+  padding-left: 10px;
+}
+
+mat-sidenav-content{
+  background: #eee;
+}
+
+/*mat-card-content{*/
+  /*justify-content: center;*/
+/*}*/

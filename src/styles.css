@@ -1,1 +1,11 @@
 /* You can add global styles to this file, and also import other style files */
+html, body { height: 100%;  background: #eee;}
+body { font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.sidebar {
+  justify-content: center;
+}
+
+mat-card {
+  justify-content: center;
+}
