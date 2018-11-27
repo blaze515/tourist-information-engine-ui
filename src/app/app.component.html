@@ -22,13 +22,13 @@
       </mat-card>
       <mat-card>
         <mat-radio-group>
-          <mat-radio-button value="1">
+          <mat-radio-button value="1" [checked]="true">
             One&nbsp;&nbsp;
           </mat-radio-button>
           <mat-radio-button value="2">
             Two&nbsp;&nbsp;
           </mat-radio-button>
-          <mat-radio-button value="3" [checked]="isChecked">
+          <mat-radio-button value="3">
             Three&nbsp;&nbsp;
           </mat-radio-button>
         </mat-radio-group>
@@ -41,5 +41,9 @@
       </mat-card>
     </div>
   </mat-sidenav>
-  <mat-sidenav-content></mat-sidenav-content>
+  <mat-sidenav-content>
+    <div class="map">
+
+    </div>
+  </mat-sidenav-content>
 </mat-sidenav-container>

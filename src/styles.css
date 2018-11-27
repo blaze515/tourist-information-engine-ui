@@ -9,3 +9,9 @@ body { font-family: Roboto, "Helvetica Neue", sans-serif; }
 mat-card {
   justify-content: center;
 }
+
+.map {
+  background: #aaaaaa;
+  height: 100%;
+  width: 100%;
+}
