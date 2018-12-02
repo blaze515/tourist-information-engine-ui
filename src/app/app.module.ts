@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {HttpClientModule} from '@angular/common/http';
 
+
 import {
   MatToolbarModule,
   MatTabsModule,
@@ -17,14 +18,17 @@ import {
   MatCardModule,
   MatTableModule,
   MatSortModule,
-  MatSelectModule
+  MatSelectModule,
+  MatDialogModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
+import {AppDialogModalComponent} from './app-dialog-modal.component';
 
 @NgModule({
-  imports:      [ BrowserModule, HttpClientModule, FormsModule, BrowserAnimationsModule, MatTableModule, MatToolbarModule, MatTabsModule, MatButtonModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule, MatRadioModule, MatSidenavModule, MatCardModule, MatSortModule, MatSelectModule ],
-  declarations: [ AppComponent ],
+  imports:      [ BrowserModule, HttpClientModule, FormsModule, BrowserAnimationsModule, MatTableModule, MatToolbarModule, MatTabsModule, MatButtonModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule, MatRadioModule, MatSidenavModule, MatCardModule, MatSortModule, MatDialogModule],
+  entryComponents: [AppComponent, AppDialogModalComponent ],
+  declarations: [ AppComponent, AppDialogModalComponent ],
   bootstrap:    [ AppComponent ]
 })
 export class AppModule { }

@@ -1,21 +1,22 @@
-import {Component, ViewChild} from '@angular/core';
+import {Component} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {MatTableDataSource} from '@angular/material';
-import {MatSort} from '@angular/material/typings/sort';
+import {MatDialog, MatTableDataSource} from '@angular/material';
+import {NgForm} from '@angular/forms';
+import {AppDialogModalComponent} from './app-dialog-modal.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-
 export class AppComponent {
   title = 'mass-transit-ui';
   private baseUrl = 'http://localhost:8080/';
-  private startURL = this.baseUrl + '/start/';
-  private processEventURL = this.baseUrl + '/processEvent/';
-  private rewindEventURL = this.baseUrl + '/rewind';
-  private resetURL = this.baseUrl + '/reset';
+  private startURL = this.baseUrl + 'start/';
+  private processEventURL = this.baseUrl + 'processEvent/';
+  private rewindEventURL = this.baseUrl + 'rewind/';
+  private resetURL = this.baseUrl + 'reset/';
+  private updateBusURL = this.baseUrl + 'updateBus/\{busId\}/\{routeId\}/\{speed\}/\{capacity\}?busId=';
   private configFile;
   private parameterFile;
   private configFileInput;
@@ -23,16 +24,22 @@ export class AppComponent {
   public started;
   public dataSource: any;
   public lastEvent: string;
+  public efficiency: string;
   public myTable;
   public displayedColumns = ['stopid', 'stopName', 'passengersAtStop', 'busid', 'passengersOnBus', 'passengerCapacity', 'routeid', 'speed'];
   public canUpdate: boolean;
   public canRewind: boolean;
   public configSelected: boolean;
   public paramsSelected: boolean;
+  public bid: any;
+  public rid: any;
+  public spd: any;
+  public cap: any;
+  public updateResult: any;
 
   // @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, public dialog: MatDialog) {
     this.dataSource = new MatTableDataSource([{}]);
     this.started = false;
     this.lastEvent = '';
@@ -74,6 +81,7 @@ export class AppComponent {
         console.log(json);
         this.dataSource = new MatTableDataSource(json['stateList']);
         this.lastEvent = json['lastEventString'];
+        this.efficiency = json['systemEfficiency'];
         this.canUpdate = true;
         this.canRewind = true;
         if (this.resetCount < 3) {
@@ -92,12 +100,13 @@ export class AppComponent {
           console.log(json);
           this.dataSource = new MatTableDataSource(json['stateList']);
           this.lastEvent = json['lastEventString'];
+          this.efficiency = json['systemEfficiency'];
           this.resetCount = this.resetCount - 1;
         }
       );
     }
-    console.log()
-    if (this.resetCount === 0){
+    console.log();
+    if (this.resetCount === 0) {
       this.canRewind = false;
     }
   }
@@ -107,4 +116,28 @@ export class AppComponent {
   }
 
 
+  updateBus(busUpdateForm: NgForm) {
+    const url = `${this.updateBusURL + this.bid}&routeId=${this.rid}&speed=${this.spd}&capacity=${this.cap}`;
+    this.http.get(url).subscribe(
+        resp => {
+          if (resp) {
+            this.updateResult = 'The operation was successful, and the bus will be updated.';
+            // console.log('Failed');
+          } else {
+            this.updateResult = 'The operation failed. Make sure that the bus and route IDs are valid.';
+            // console.log('Succeeded');
+          }
+
+          const dialogRef = this.dialog.open(AppDialogModalComponent, {
+            width: '250px',
+            data: {updateResult: this.updateResult}
+          });
+
+
+          dialogRef.afterClosed().subscribe(result => {
+            console.log('The dialog was closed');
+          });
+        });
+  }
 }
+
