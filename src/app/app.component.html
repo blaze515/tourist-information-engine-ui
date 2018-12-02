@@ -14,8 +14,43 @@
         <input hidden type="file" #parametersFileInput (change)="uploadParameterFile($event)">
       </mat-card>
       <mat-card>
+        <form #kValueForm="ngForm" (submit)="kValues()">
+          <div>
+            <mat-form-field>
+              <mat-label>K_SPEED</mat-label>
+              <input matInput type="text" name="kspd" [(ngModel)]="kspd" placeholder="K_SPEED" required>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <mat-label>K_CAPACITY</mat-label>
+              <input matInput type="text" name="kcap" [(ngModel)]="kcap" placeholder="K_CAPACITY" required>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <mat-label>K_WAITING</mat-label>
+              <input matInput type="text" name="kwait" [(ngModel)]="kwait" placeholder="K_WAITING" required>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <mat-label>K_BUSES</mat-label>
+              <input matInput type="text" name="kbus" [(ngModel)]="kbus" placeholder="K_BUSES" required>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <mat-label>K_COMBINED</mat-label>
+              <input matInput type="text" name="kcomb" [(ngModel)]="kcomb" placeholder="K_COMBINED" required>
+            </mat-form-field>
+          </div>
+          <button mat-button type="button" [disabled]="started" mat-raised-button color="primary" (click)="kValues()">Submit</button>
+        </form>
+      </mat-card>
+      <mat-card>
         <h4>Run Simulation</h4>
-        <button [disabled]="started || !configSelected || !paramsSelected" mat-raised-button color="primary" (click)="startSim($event)">Start</button>
+        <button [disabled]="started || !configSelected || !paramsSelected || !hasKvalues" mat-raised-button color="primary" (click)="startSim($event)">Start</button>
       </mat-card>
       <mat-card>
         <h4>Simulation Controls</h4>

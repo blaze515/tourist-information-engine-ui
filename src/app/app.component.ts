@@ -12,7 +12,7 @@ import {AppDialogModalComponent} from './app-dialog-modal.component';
 export class AppComponent {
   title = 'mass-transit-ui';
   private baseUrl = 'http://localhost:8080/';
-  private startURL = this.baseUrl + 'start/';
+  private startURL = this.baseUrl + 'start/\{kspd\}/\{kcap\}/\{kwait\}/\{kbus\}/\{kcomb\}?kspd=';
   private processEventURL = this.baseUrl + 'processEvent/';
   private rewindEventURL = this.baseUrl + 'rewind/';
   private resetURL = this.baseUrl + 'reset/';
@@ -36,6 +36,12 @@ export class AppComponent {
   public spd: any;
   public cap: any;
   public updateResult: any;
+  kspd: any;
+  kcap: any;
+  kwait: any;
+  kbus: any;
+  kcomb: any;
+  private hasKvalues: boolean;
 
   // @ViewChild(MatSort) sort: MatSort;
 
@@ -48,14 +54,22 @@ export class AppComponent {
     this.configSelected = false;
     this.paramsSelected = false;
     this.resetCount = 0;
+    this.kspd = 1;
+    this.kcap = 1;
+    this.kwait = 1;
+    this.kbus = 1;
+    this.kcomb = 1;
   }
 
   startSim(e) {
+    const url = `${this.startURL + this.kspd}&kcap=${this.kcap}&kwait=${this.kwait}&kbus=${this.kbus}&kcomb=${this.kcomb}`;
+    console.log(url);
+
     const formData = new FormData();
     formData.append('configList', this.configFile);
     formData.append('configList', this.parameterFile);
 
-    const result = this.http.post(this.startURL, formData);
+    const result = this.http.post(url, formData);
     result.subscribe(
       json => {
         console.log(json);
@@ -118,6 +132,7 @@ export class AppComponent {
 
   updateBus(busUpdateForm: NgForm) {
     const url = `${this.updateBusURL + this.bid}&routeId=${this.rid}&speed=${this.spd}&capacity=${this.cap}`;
+
     this.http.get(url).subscribe(
         resp => {
           if (resp) {
@@ -138,6 +153,10 @@ export class AppComponent {
             console.log('The dialog was closed');
           });
         });
+  }
+
+  kValues() {
+    this.hasKvalues = true;
   }
 }
 
