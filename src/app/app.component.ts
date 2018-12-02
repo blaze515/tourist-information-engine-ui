@@ -14,17 +14,21 @@ export class AppComponent {
   private baseUrl = 'http://localhost:8080/';
   private startURL = this.baseUrl + '/start/';
   private processEventURL = this.baseUrl + '/processEvent/';
-  private rewindEventURL = this.baseUrl + 'rewind';
-  private resetURL = this.baseUrl + 'reset';
+  private rewindEventURL = this.baseUrl + '/rewind';
+  private resetURL = this.baseUrl + '/reset';
   private configFile;
   private parameterFile;
   private configFileInput;
+  private resetCount: any;
   public started;
   public dataSource: any;
   public lastEvent: string;
   public myTable;
   public displayedColumns = ['stopid', 'stopName', 'passengersAtStop', 'busid', 'passengersOnBus', 'passengerCapacity', 'routeid', 'speed'];
   public canUpdate: boolean;
+  public canRewind: boolean;
+  public configSelected: boolean;
+  public paramsSelected: boolean;
 
   // @ViewChild(MatSort) sort: MatSort;
 
@@ -33,6 +37,10 @@ export class AppComponent {
     this.started = false;
     this.lastEvent = '';
     this.canUpdate = false;
+    this.canRewind = false;
+    this.configSelected = false;
+    this.paramsSelected = false;
+    this.resetCount = 0;
   }
 
   startSim(e) {
@@ -48,15 +56,16 @@ export class AppComponent {
       }
     );
     this.started = true;
-    this.myTable.renderRows();
   }
 
   uploadConfigFile(e) {
     this.configFile = e.target.files[0];
+    this.configSelected = true;
   }
 
   uploadParameterFile(e) {
     this.parameterFile = e.target.files[0];
+    this.paramsSelected = true;
   }
 
   processEvent(e) {
@@ -66,30 +75,35 @@ export class AppComponent {
         this.dataSource = new MatTableDataSource(json['stateList']);
         this.lastEvent = json['lastEventString'];
         this.canUpdate = true;
-        this.myTable.renderRows();
+        this.canRewind = true;
+        if (this.resetCount < 3) {
+          this.resetCount = this.resetCount + 1;
+          console.log(this.resetCount);
+        }
       }
     );
   }
 
   rewindLastEvent(e) {
-    this.http.get(this.rewindEventURL).subscribe(
-      json => {
-        console.log(json);
-        this.dataSource = new MatTableDataSource(json['stateList']);
-        this.lastEvent = json['lastEventString'];
-        this.myTable.renderRows();
-      }
-    );
+    console.log(this.resetCount);
+    if (this.resetCount > 0) {
+      this.http.get(this.rewindEventURL).subscribe(
+        json => {
+          console.log(json);
+          this.dataSource = new MatTableDataSource(json['stateList']);
+          this.lastEvent = json['lastEventString'];
+          this.resetCount = this.resetCount - 1;
+        }
+      );
+    }
+    console.log()
+    if (this.resetCount === 0){
+      this.canRewind = false;
+    }
   }
 
   reset(e) {
-    this.http.get(this.resetURL).subscribe(json => {
-        this.dataSource = [{}];
-        this.started = false;
-        this.canUpdate = false;
-        this.myTable.renderRows();
-      }
-    );
+    window.location.reload();
   }
 
 

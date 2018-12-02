@@ -15,17 +15,17 @@
       </mat-card>
       <mat-card>
         <h4>Run Simulation</h4>
-        <button mat-raised-button color="primary" (click)="startSim($event)">Start</button>
+        <button [disabled]="started || !configSelected || !paramsSelected" mat-raised-button color="primary" (click)="startSim($event)">Start</button>
       </mat-card>
       <mat-card>
         <h4>Simulation Controls</h4>
-        <button mat-raised-button color="primary" (click)="processEvent($event)">Process Next Event</button>
+        <button [disabled]="!started" mat-raised-button color="primary" (click)="processEvent($event)">Process Next Event</button>
       </mat-card>
       <mat-card>
-      <button mat-raised-button color="primary" (click)="rewindLastEvent($event)">Rewind Last Event</button>
+      <button [disabled]="!canRewind" mat-raised-button color="primary" (click)="rewindLastEvent($event)">Rewind Last Event</button>
       </mat-card>
       <mat-card>
-        <button mat-raised-button color="primary" (click)="reset($event)">Reset</button>
+        <button [disabled]="!started" mat-raised-button color="primary" (click)="reset($event)">Reset</button>
       </mat-card>
       <mat-card>
         <h4>Update Bus</h4>
@@ -56,9 +56,6 @@
         <button [disabled]="!canUpdate" mat-raised-button color="primary" (click)="updateBus.click()">Submit</button>
         <input hidden type="submit" #updateBus (change)="uploadParameterFile($event)">
       </mat-card>
-
-
-
     </div>
   </mat-sidenav>
   <mat-sidenav-content class="map">
