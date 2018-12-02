@@ -4,46 +4,111 @@
 <mat-sidenav-container class="container">
   <mat-sidenav mode="side" opened>
     <div class="sidebar">
-      <h3>Scenario Configuration</h3>
       <mat-card>
-        <p>Select Scenario Configuration:&nbsp;&nbsp;&nbsp;<button mat-raised-button color="primary" (click)="configFileInput.click()">Upload</button></p>
-        <input hidden type="file" #configFileInput>
-        <p>Select Probability Parameters:&nbsp;&nbsp;&nbsp;<button mat-raised-button color="primary" (click)="parametersFileInput.click()">Upload</button></p>
-        <input hidden type="file" #parametersFileInput>
-      </mat-card>
-      <!--<input hidden type="file" #parametersFileInput>-->
-      <h3>Run Simulation</h3>
-      <mat-card>
-        <button mat-raised-button color="primary" (click)="startSim.click()">Start</button>
-      </mat-card>
-      <h3>Simulation Controls</h3>
-      <mat-card>
-        <button mat-raised-button color="primary" (click)="startSim.click()">Move Bus</button>
+        <h4>Scenario Configuration</h4>
+        <p>Select Scenario Configuration:</p>
+        <button [disabled]="started" mat-raised-button color="primary" (click)="configFileInput.click()">Upload</button>
+        <input hidden type="file" #configFileInput (change)="uploadConfigFile($event)">
+        <p>Select Probability Parameters:</p>
+        <button [disabled]="started" mat-raised-button color="primary" (click)="parametersFileInput.click()">Upload</button>
+        <input hidden type="file" #parametersFileInput (change)="uploadParameterFile($event)">
       </mat-card>
       <mat-card>
-        <mat-radio-group>
-          <mat-radio-button value="1" [checked]="true">
-            One&nbsp;&nbsp;
-          </mat-radio-button>
-          <mat-radio-button value="2">
-            Two&nbsp;&nbsp;
-          </mat-radio-button>
-          <mat-radio-button value="3">
-            Three&nbsp;&nbsp;
-          </mat-radio-button>
-        </mat-radio-group>
+        <h4>Run Simulation</h4>
+        <button mat-raised-button color="primary" (click)="startSim($event)">Start</button>
       </mat-card>
       <mat-card>
-      <button mat-raised-button color="primary" (click)="startSim.click()">Replay</button>
+        <h4>Simulation Controls</h4>
+        <button mat-raised-button color="primary" (click)="processEvent($event)">Process Next Event</button>
       </mat-card>
       <mat-card>
-        <button mat-raised-button color="primary" (click)="startSim.click()">Reset Buses</button>
+      <button mat-raised-button color="primary" (click)="rewindLastEvent($event)">Rewind Last Event</button>
       </mat-card>
+      <mat-card>
+        <button mat-raised-button color="primary" (click)="reset($event)">Reset</button>
+      </mat-card>
+      <mat-card>
+        <h4>Update Bus</h4>
+        <div>
+          <mat-form-field>
+            <mat-label>BusID</mat-label>
+            <input matInput type="text" placeholder="busid">
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-label>RouteID</mat-label>
+            <input matInput type="text" placeholder="routeid">
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-label>Speed</mat-label>
+            <input matInput type="text" placeholder="speed">
+          </mat-form-field>
+        </div>
+        <div>
+          <mat-form-field>
+            <mat-label>Capacity</mat-label>
+            <input matInput type="text" placeholder="capacity">
+          </mat-form-field>
+        </div>
+        <button [disabled]="!canUpdate" mat-raised-button color="primary" (click)="updateBus.click()">Submit</button>
+        <input hidden type="submit" #updateBus (change)="uploadParameterFile($event)">
+      </mat-card>
+
+
+
     </div>
   </mat-sidenav>
-  <mat-sidenav-content>
-    <div class="map">
-
+  <mat-sidenav-content class="map">
+    <div>
+        <mat-table #myTable [dataSource]="dataSource" matSort matSortActive="stopid">
+          <ng-container matColumnDef="stopid">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> StopID </mat-header-cell>
+            <mat-cell *matCellDef="let state"> {{state.stopid}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="stopName">
+            <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+            <mat-cell *matCellDef="let state"> {{state.stopName}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="passengersAtStop">
+            <mat-header-cell *matHeaderCellDef> # Waiting </mat-header-cell>
+            <mat-cell *matCellDef="let state"> {{state.passengersAtStop}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="busid">
+            <mat-header-cell *matHeaderCellDef> BusID </mat-header-cell>
+            <mat-cell *matCellDef="let state"> {{state.busid}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="passengersOnBus">
+            <mat-header-cell *matHeaderCellDef> # Onboard </mat-header-cell>
+            <mat-cell *matCellDef="let state"> {{state.passengersOnBus}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="passengerCapacity">
+            <mat-header-cell *matHeaderCellDef> Capacity </mat-header-cell>
+            <mat-cell *matCellDef="let state"> {{state.passengerCapacity}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="speed">
+            <mat-header-cell *matHeaderCellDef> Speed </mat-header-cell>
+            <mat-cell *matCellDef="let state"> {{state.speed}} </mat-cell>
+          </ng-container>
+          <ng-container matColumnDef="routeid">
+            <mat-header-cell *matHeaderCellDef> RouteID </mat-header-cell>
+            <mat-cell *matCellDef="let state"> {{state.routeid}} </mat-cell>
+          </ng-container>
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: ['stopid', 'stopName', 'passengersAtStop', 'busid', 'passengersOnBus', 'passengerCapacity', 'speed', 'routeid'];"></mat-row>
+        </mat-table>
+    </div>
+    <div>
+      <mat-card>
+        <h3>Last Event: {{lastEvent}}</h3>
+      </mat-card>
+    </div>
+    <div>
+      <mat-card>
+        <h3>System Efficiency: </h3>
+      </mat-card>
     </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

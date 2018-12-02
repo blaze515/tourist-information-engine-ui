@@ -24,6 +24,12 @@ mat-sidenav-content{
   background: #eee;
 }
 
-/*mat-card-content{*/
-  /*justify-content: center;*/
-/*}*/
+mat-card-content{
+  display: flex;
+  justify-content: center;
+}
+
+mat-header-cell {
+  display:flex;
+  justify-content:flex-start;
+}
