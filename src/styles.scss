@@ -4,6 +4,7 @@ body { font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .sidebar {
   justify-content: center;
+  min-width: 21em;
 }
 
 mat-card {
@@ -11,5 +12,8 @@ mat-card {
 }
 
 .map {
+  justify-content: center;
   background: #aaaaaa;
+  min-height: 53em;
+  max-width: 63em;
 }

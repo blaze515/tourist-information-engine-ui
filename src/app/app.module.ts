@@ -18,17 +18,18 @@ import {
   MatCardModule,
   MatTableModule,
   MatSortModule,
-  MatSelectModule,
   MatDialogModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
 import {AppDialogModalComponent} from './app-dialog-modal.component';
+import { MapComponent } from './map/map/map.component';
+import { SidebarComponent } from './sidebar/sidebar/sidebar.component';
 
 @NgModule({
   imports:      [ BrowserModule, HttpClientModule, FormsModule, BrowserAnimationsModule, MatTableModule, MatToolbarModule, MatTabsModule, MatButtonModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, MatCheckboxModule, MatRadioModule, MatSidenavModule, MatCardModule, MatSortModule, MatDialogModule],
   entryComponents: [AppComponent, AppDialogModalComponent ],
-  declarations: [ AppComponent, AppDialogModalComponent ],
+  declarations: [ AppComponent, AppDialogModalComponent, MapComponent, SidebarComponent ],
   bootstrap:    [ AppComponent ]
 })
 export class AppModule { }
