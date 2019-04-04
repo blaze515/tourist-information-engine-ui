@@ -1,6 +1,8 @@
-# MassTransitUi
+# Tourist Information Engine
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.2.4.
+This project uses [Angular CLI](https://github.com/angular/angular-cli) version 7+. Setup instructions for NPM/Node can be found [here](https://www.npmjs.com/get-npm), and you can find the Angular getting started guide [here](https://angular.io/guide/quickstart).
+
+The project also utilizes [Angular Material](https://material.angular.io/)) and [MapBox GL JS](https://docs.mapbox.com/mapbox-gl-js/api/)).
 
 ## Development server
 
